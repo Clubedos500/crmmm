@@ -1,4 +1,5 @@
-import { ProductMetric, DailyTask, MarketTrend } from './types';
+
+import { ProductMetric, DailyTask, MarketTrend, ViralProduct } from './types';
 
 export const TOP_PRODUCTS: ProductMetric[] = [
     { category: 'Sneakers', brand: 'Nike (Air Force 1, Dunk, Jordan)', buyPrice: '30€ - 50€', sellPrice: '70€ - 120€', margin: '40% - 60%', velocity: 'Explosiva', notes: 'Limpe bem, troque cadarços, boas fotos.' },
@@ -16,6 +17,60 @@ export const MARKET_TRENDS: MarketTrend[] = [
     { niche: 'Old Money', trend: 'Suéteres nos ombros, linho, Ralph Lauren', avgTicket: '60€', tip: 'Estética limpa, fotos em ambiente claro.' },
     { niche: 'Football Shirts', trend: 'Camisas de times retrô (90s/00s)', avgTicket: '50€', tip: 'Verifique originalidade das etiquetas internas.' },
 ];
+
+export const VIRAL_PRODUCTS: ViralProduct[] = [
+    {
+        "ID_Interno": "ES_GEN_001",
+        "Nome_Produto_Curto": "Bolso Bimba y Lola (Réplica/Outlet)",
+        "Nicho_De_Mercado": "Moda España / Acessórios",
+        "Motivo_Principal_Viral": "Alta demanda por modelos 'Bandolera' esgotados em loja.",
+        "Acao_Estrategica_Recomendada": "Comprar no AliExpress (AAA+) ou Outlet e revender como 'Novo s/ etiqueta'.",
+        "Plataforma_Pico": "Vinted ES / Wallapop",
+        "Estimativa_Venda_BRL": 65.00, // Actually treating as EUR in UI
+        "Estimativa_Custo_BRL": 18.00 // Actually treating as EUR in UI
+    },
+    {
+        "ID_Interno": "ES_GEN_002",
+        "Nome_Produto_Curto": "Projetor Portátil HY300 (4K)",
+        "Nicho_De_Mercado": "Tech / Gadgets",
+        "Motivo_Principal_Viral": "Viral no TikTok Espanha como 'Cinema em Casa Barato'.",
+        "Acao_Estrategica_Recomendada": "Dropshipping reverso: Comprar 5un no Ali e enviar rápido localmente.",
+        "Plataforma_Pico": "TikTok ES",
+        "Estimativa_Venda_BRL": 75.00,
+        "Estimativa_Custo_BRL": 32.00
+    },
+    {
+        "ID_Interno": "ES_GEN_003",
+        "Nome_Produto_Curto": "Vestido Zara Satinado (Viral)",
+        "Nicho_De_Mercado": "Fast Fashion",
+        "Motivo_Principal_Viral": "Esgotado nas lojas de Madrid/Barcelona. Revenda com ágio.",
+        "Acao_Estrategica_Recomendada": "Monitorar reposição no site Zara às 08:00 e listar imediatamente.",
+        "Plataforma_Pico": "Instagram",
+        "Estimativa_Venda_BRL": 45.00,
+        "Estimativa_Custo_BRL": 29.95
+    },
+    {
+        "ID_Interno": "ES_GEN_004",
+        "Nome_Produto_Curto": "Lego Flowers (Bouquet)",
+        "Nicho_De_Mercado": "Decoração / Hobby",
+        "Motivo_Principal_Viral": "Presente muito popular para casais. Versões 'compatíveis' vendem bem.",
+        "Acao_Estrategica_Recomendada": "Vender a versão 'Blocos Compatíveis' deixando claro que não é Lego.",
+        "Plataforma_Pico": "Vinted ES",
+        "Estimativa_Venda_BRL": 35.00,
+        "Estimativa_Custo_BRL": 12.00
+    },
+    {
+        "ID_Interno": "ES_GEN_005",
+        "Nome_Produto_Curto": "Camisa Futebol Retro (Real/Barça 90s)",
+        "Nicho_De_Mercado": "Bloke Core",
+        "Motivo_Principal_Viral": "Tendência 'Bloke Core' fortíssima na Europa.",
+        "Acao_Estrategica_Recomendada": "Fornecedores asiáticos (DHGate/Ali) -> Venda local com entrega rápida.",
+        "Plataforma_Pico": "Vinted / Depop",
+        "Estimativa_Venda_BRL": 45.00,
+        "Estimativa_Custo_BRL": 15.00
+    }
+];
+
 
 export const ROADMAP_DATA: DailyTask[] = [
     {

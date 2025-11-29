@@ -1,20 +1,128 @@
-import React from 'react';
-import { TOP_PRODUCTS, MARKET_TRENDS } from '../data';
-import { TrendingUp, Zap, Tag } from 'lucide-react';
+
+import React, { useState } from 'react';
+import { TOP_PRODUCTS, MARKET_TRENDS, VIRAL_PRODUCTS } from '../data';
+import { TrendingUp, Zap, Tag, Flame, ArrowUpRight, Search, PlusCircle, Check } from 'lucide-react';
+import { InventoryItem, ViralProduct } from '../types';
 
 const MarketAnalysis: React.FC = () => {
+  const [importedIds, setImportedIds] = useState<Set<string>>(new Set());
+
+  const handleImportToCRM = (product: ViralProduct) => {
+    // 1. Get current inventory
+    const savedItems = localStorage.getItem('vinted_inventory');
+    const currentInventory: InventoryItem[] = savedItems ? JSON.parse(savedItems) : [];
+
+    // 2. Create new item
+    const newItem: InventoryItem = {
+        id: Date.now().toString(),
+        name: product.Nome_Produto_Curto,
+        brand: product.Nicho_De_Mercado.split('/')[0].trim(), // Extract generic brand/niche
+        buyPrice: product.Estimativa_Custo_BRL, // Using the property as EUR
+        sellPrice: product.Estimativa_Venda_BRL, // Using the property as EUR
+        status: 'listed',
+        dateAdded: new Date().toLocaleDateString('pt-BR')
+    };
+
+    // 3. Save
+    const updatedInventory = [newItem, ...currentInventory];
+    localStorage.setItem('vinted_inventory', JSON.stringify(updatedInventory));
+
+    // 4. UI Feedback
+    const newSet = new Set(importedIds);
+    newSet.add(product.ID_Interno);
+    setImportedIds(newSet);
+    
+    // Optional: Could trigger a global event or context update here, 
+    // but CRM component reads from localStorage on mount, so it works if user navigates away and back.
+  };
+
   return (
-    <div className="space-y-8 animate-fade-in">
+    <div className="space-y-8 animate-fade-in pb-10">
       
+      {/* Viral Finds Section (AI MODULE) */}
+      <div className="bg-gradient-to-br from-indigo-900 to-slate-900 rounded-xl shadow-lg border border-indigo-700/50 overflow-hidden relative">
+        <div className="absolute top-0 right-0 p-4 opacity-10">
+            <Flame size={120} className="text-indigo-500" />
+        </div>
+        <div className="p-6 border-b border-indigo-800/50 flex flex-col md:flex-row justify-between items-start md:items-center relative z-10 gap-4">
+          <div>
+            <h2 className="text-xl font-bold text-white flex items-center gap-2">
+              <Flame className="text-orange-500 fill-orange-500 animate-pulse" size={20} />
+              Oportunidades Virais (Espanha/Europa)
+            </h2>
+            <p className="text-indigo-200 text-sm mt-1">Detectado pelo Módulo de Inserção de Dados (MID) - Arbitragem AliExpress &gt; Vinted ES</p>
+          </div>
+          <span className="bg-indigo-600 text-white text-xs font-bold px-3 py-1 rounded-full border border-indigo-400 animate-pulse">
+            AO VIVO • MADRID
+          </span>
+        </div>
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-6">
+            {VIRAL_PRODUCTS.map((product) => {
+                const isImported = importedIds.has(product.ID_Interno);
+                return (
+                <div key={product.ID_Interno} className="bg-slate-800/80 backdrop-blur-sm rounded-lg border border-slate-700 p-4 hover:border-indigo-500 transition-all group flex flex-col">
+                    <div className="flex justify-between items-start mb-2">
+                        <span className="text-[10px] font-bold uppercase tracking-wider text-indigo-400 bg-indigo-900/30 px-2 py-0.5 rounded">
+                            {product.Nicho_De_Mercado}
+                        </span>
+                        <div className="flex items-center gap-1 text-[10px] text-slate-400">
+                            <Search size={10} />
+                            {product.Plataforma_Pico}
+                        </div>
+                    </div>
+                    <h3 className="font-bold text-white text-lg mb-1 group-hover:text-indigo-300 transition-colors">{product.Nome_Produto_Curto}</h3>
+                    <p className="text-xs text-slate-400 mb-3 italic flex-1">"{product.Motivo_Principal_Viral}"</p>
+                    
+                    <div className="bg-slate-900 rounded p-2 mb-3 border border-slate-800">
+                        <div className="flex justify-between text-xs mb-1">
+                            <span className="text-slate-500">Custo (AliExpress)</span>
+                            <span className="text-slate-500">Venda (Vinted)</span>
+                        </div>
+                        <div className="flex justify-between font-bold">
+                            <span className="text-slate-300">€{product.Estimativa_Custo_BRL.toFixed(2)}</span>
+                            <span className="text-emerald-400">€{product.Estimativa_Venda_BRL.toFixed(2)}</span>
+                        </div>
+                    </div>
+                    
+                    <div className="text-xs text-indigo-200 bg-indigo-900/20 p-2 rounded border border-indigo-900/30 flex gap-2 mb-3">
+                        <ArrowUpRight size={14} className="flex-shrink-0 mt-0.5" />
+                        {product.Acao_Estrategica_Recomendada}
+                    </div>
+
+                    <button 
+                        onClick={() => handleImportToCRM(product)}
+                        disabled={isImported}
+                        className={`w-full py-2 rounded-lg text-xs font-bold flex items-center justify-center gap-2 transition-all ${
+                            isImported 
+                            ? 'bg-emerald-600/20 text-emerald-400 border border-emerald-600/50 cursor-default' 
+                            : 'bg-indigo-600 hover:bg-indigo-500 text-white shadow-md hover:shadow-indigo-500/20'
+                        }`}
+                    >
+                        {isImported ? (
+                            <>
+                                <Check size={14} /> Integrado ao CRM
+                            </>
+                        ) : (
+                            <>
+                                <PlusCircle size={14} /> Integrar ao Estoque
+                            </>
+                        )}
+                    </button>
+                </div>
+            )})}
+        </div>
+      </div>
+
       {/* Top Products Section */}
       <div className="bg-slate-800 rounded-xl shadow-sm border border-slate-700 overflow-hidden">
         <div className="p-6 border-b border-slate-700 flex justify-between items-center bg-slate-900/30">
           <div>
             <h2 className="text-xl font-bold text-white flex items-center gap-2">
               <Zap className="text-yellow-500 fill-yellow-500" size={20} />
-              Top Produtos de Alta Rotatividade
+              Top Produtos Vinted (Alta Rotatividade)
             </h2>
-            <p className="text-slate-400 text-sm mt-1">Foque nestes itens para liquidez rápida.</p>
+            <p className="text-slate-400 text-sm mt-1">Foque nestes itens para liquidez rápida na plataforma.</p>
           </div>
         </div>
         <div className="overflow-x-auto">

@@ -1,3 +1,4 @@
+
 export interface ProductMetric {
     category: string;
     brand: string;
@@ -59,6 +60,17 @@ export interface GameState {
     lastLoginDate: string;
     streak: number;
     missions: Mission[];
+}
+
+export interface ViralProduct {
+    ID_Interno: string;
+    Nome_Produto_Curto: string;
+    Nicho_De_Mercado: string;
+    Motivo_Principal_Viral: string;
+    Acao_Estrategica_Recomendada: string;
+    Plataforma_Pico: string;
+    Estimativa_Venda_BRL: number;
+    Estimativa_Custo_BRL: number;
 }
 
 export enum AppView {
